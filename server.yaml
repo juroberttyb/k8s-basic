@@ -3,11 +3,17 @@ kind: Service
 metadata:
   name: pyserver
 spec:
-  type: LoadBalancer
+  type: NodePort # LoadBalancer
+  externalTrafficPolicy: Cluster
+  ipFamilyPolicy: SingleStack
+  ipFamilies:
+  - IPv4
   selector:
     app: pyserver
   ports:
-  - port: 8000
+  - protocol: TCP
+    nodePort: 30001
+    port: 8001
     targetPort: 8000
 ---
 apiVersion: apps/v1
