@@ -3,16 +3,16 @@ kind: Service
 metadata:
   name: pyserver
 spec:
-  type: NodePort # LoadBalancer
-  externalTrafficPolicy: Cluster
-  ipFamilyPolicy: SingleStack
-  ipFamilies:
-  - IPv4
+  # type: NodePort # LoadBalancer
+  # externalTrafficPolicy: Cluster
+  # ipFamilyPolicy: SingleStack
+  # ipFamilies:
+  # - IPv4
   selector:
     app: pyserver
   ports:
   - protocol: TCP
-    nodePort: 30001
+    # nodePort: 30001
     port: 8001
     targetPort: 8000
 ---
@@ -41,3 +41,16 @@ spec:
             cpu: "250m"
         ports:
         - containerPort: 8000
+        volumeMounts:
+        - name:  configmaptest
+          mountPath: /mnt/config
+        - name:  secretest
+          mountPath: /mnt/secret
+          readOnly: true
+      volumes:
+        - name: configmaptest
+          configMap: 
+            name: game-demo
+        - name: secretest
+          secret: 
+            secretName: mysecret
